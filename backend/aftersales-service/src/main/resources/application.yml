@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: aftersales-service
+  config:
+    import:
+      - classpath:application-shared.yml
+      - classpath:application-postgres.yml
+      - classpath:application-kafka.yml
+      - optional:file:.env[.properties]
+      - optional:file:../.env[.properties]
+
+server:
+  port: ${AFTERSALES_SERVICE_PORT:8084}
+
+outbox:
+  relay:
+    enabled: ${AFTERSALES_OUTBOX_RELAY_ENABLED:true}
+    aggregate-types: CUSTOMER_ASSET,REPAIR,REMINDER

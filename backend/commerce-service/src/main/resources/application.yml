@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: commerce-service
+  config:
+    import:
+      - classpath:application-shared.yml
+      - classpath:application-postgres.yml
+      - classpath:application-kafka.yml
+      - classpath:application-redis.yml
+      - optional:file:.env[.properties]
+      - optional:file:../.env[.properties]
+
+server:
+  port: ${COMMERCE_SERVICE_PORT:8083}
+
+outbox:
+  relay:
+    enabled: ${COMMERCE_OUTBOX_RELAY_ENABLED:true}
+    aggregate-types: LEAD,QUOTATION,CONTRACT,INVOICE,PAYMENT

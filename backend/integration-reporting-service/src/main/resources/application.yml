@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: integration-reporting-service
+  config:
+    import:
+      - classpath:application-shared.yml
+      - classpath:application-postgres.yml
+      - classpath:application-kafka.yml
+      - classpath:application-redis.yml
+      - optional:file:.env[.properties]
+      - optional:file:../.env[.properties]
+
+server:
+  port: ${INTEGRATION_REPORTING_SERVICE_PORT:8087}
+
+outbox:
+  relay:
+    enabled: ${REPORTING_OUTBOX_RELAY_ENABLED:true}
+    aggregate-types: KPI,INTEGRATION

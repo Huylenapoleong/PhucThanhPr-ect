@@ -1,0 +1,77 @@
+spring:
+  application:
+    name: api-gateway
+  config:
+    import:
+      - classpath:application-shared.yml
+      - classpath:application-redis.yml
+      - optional:file:.env[.properties]
+      - optional:file:../.env[.properties]
+  cloud:
+    gateway:
+      server:
+        webflux:
+          httpclient:
+            connect-timeout: ${GATEWAY_CONNECT_TIMEOUT_MS:3000}
+            response-timeout: ${GATEWAY_RESPONSE_TIMEOUT:10s}
+          globalcors:
+            cors-configurations:
+              '[/**]':
+                allowed-origin-patterns:
+                  - ${CORS_ALLOWED_ORIGIN_PATTERN:http://localhost:*}
+                allowed-headers:
+                  - "*"
+                allowed-methods:
+                  - GET
+                  - POST
+                  - PUT
+                  - PATCH
+                  - DELETE
+                  - OPTIONS
+                allow-credentials: true
+          routes:
+            - id: user-crm-service
+              uri: ${USER_CRM_SERVICE_URL:http://localhost:8081}
+              predicates:
+                - Path=/api/auth/**,/api/customers/**,/api/staff/**,/api/users/**
+              filters:
+                - StripPrefix=1
+            - id: catalog-inventory-service
+              uri: ${CATALOG_INVENTORY_SERVICE_URL:http://localhost:8082}
+              predicates:
+                - Path=/api/products/**,/api/inventory/**,/api/stock-alerts/**
+              filters:
+                - StripPrefix=1
+            - id: commerce-service
+              uri: ${COMMERCE_SERVICE_URL:http://localhost:8083}
+              predicates:
+                - Path=/api/leads/**,/api/quotations/**,/api/contracts/**,/api/invoices/**,/api/payments/**
+              filters:
+                - StripPrefix=1
+            - id: aftersales-service
+              uri: ${AFTERSALES_SERVICE_URL:http://localhost:8084}
+              predicates:
+                - Path=/api/repairs/**,/api/reminders/**,/api/customer-assets/**
+              filters:
+                - StripPrefix=1
+            - id: automation-service
+              uri: ${AUTOMATION_SERVICE_URL:http://localhost:8085}
+              predicates:
+                - Path=/api/automation/**
+              filters:
+                - StripPrefix=1
+            - id: communication-service
+              uri: ${COMMUNICATION_SERVICE_URL:http://localhost:8086}
+              predicates:
+                - Path=/api/messages/**,/api/calls/**
+              filters:
+                - StripPrefix=1
+            - id: integration-reporting-service
+              uri: ${INTEGRATION_REPORTING_SERVICE_URL:http://localhost:8087}
+              predicates:
+                - Path=/api/reports/**,/api/kpis/**
+              filters:
+                - StripPrefix=1
+
+server:
+  port: ${API_GATEWAY_PORT:8080}

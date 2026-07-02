@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: document-worker
+  config:
+    import:
+      - classpath:application-shared.yml
+      - classpath:application-kafka.yml
+      - optional:file:.env[.properties]
+      - optional:file:../.env[.properties]
+
+server:
+  port: ${DOCUMENT_WORKER_PORT:8088}
+
+document:
+  worker:
+    topics: ${DOCUMENT_WORKER_TOPICS:phucthanh.quotation.events,phucthanh.contract.events}

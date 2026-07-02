@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: catalog-inventory-service
+  config:
+    import:
+      - classpath:application-shared.yml
+      - classpath:application-postgres.yml
+      - classpath:application-kafka.yml
+      - classpath:application-redis.yml
+      - optional:file:.env[.properties]
+      - optional:file:../.env[.properties]
+
+server:
+  port: ${CATALOG_INVENTORY_SERVICE_PORT:8082}
+
+outbox:
+  relay:
+    enabled: ${CATALOG_OUTBOX_RELAY_ENABLED:true}
+    aggregate-types: PRODUCT,INVENTORY,STOCK_ALERT
+
+catalog:
+  public-media-base-url: ${SUPABASE_PUBLIC_STORAGE_URL:${SUPABASE_URL:http://localhost:54321}/storage/v1/object/public}

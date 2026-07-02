@@ -1,0 +1,33 @@
+spring:
+  application:
+    name: user-crm-service
+  config:
+    import:
+      - classpath:application-shared.yml
+      - classpath:application-postgres.yml
+      - classpath:application-kafka.yml
+      - optional:file:.env[.properties]
+      - optional:file:../.env[.properties]
+
+server:
+  port: ${USER_CRM_SERVICE_PORT:8081}
+
+outbox:
+  relay:
+    enabled: ${USER_CRM_OUTBOX_RELAY_ENABLED:true}
+    aggregate-types: CUSTOMER,STAFF,USER_ACCOUNT
+
+supabase:
+  auth:
+    base-url: ${SUPABASE_URL:http://localhost:54321}
+    publishable-key: ${SUPABASE_PUBLISHABLE_KEY:}
+    secret-key: ${SUPABASE_SECRET_KEY:}
+    email-redirect-url: ${AUTH_EMAIL_REDIRECT_URL:http://localhost:3000/auth/confirm}
+    bootstrap-admin:
+      email: ${AUTH_BOOTSTRAP_ADMIN_EMAIL:}
+      display-name: ${AUTH_BOOTSTRAP_ADMIN_DISPLAY_NAME:Administrator}
+    refresh-cookie:
+      name: ${AUTH_REFRESH_COOKIE_NAME:pt_refresh_token}
+      secure: ${AUTH_REFRESH_COOKIE_SECURE:false}
+      same-site: ${AUTH_REFRESH_COOKIE_SAME_SITE:Lax}
+      max-age-seconds: ${AUTH_REFRESH_COOKIE_MAX_AGE_SECONDS:31536000}

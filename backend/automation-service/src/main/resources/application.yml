@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: automation-service
+  config:
+    import:
+      - classpath:application-shared.yml
+      - classpath:application-kafka.yml
+      - optional:file:.env[.properties]
+      - optional:file:../.env[.properties]
+
+server:
+  port: ${AUTOMATION_SERVICE_PORT:8085}
+
+clients:
+  user-crm: ${USER_CRM_SERVICE_URL:http://localhost:8081}
+  catalog: ${CATALOG_INVENTORY_SERVICE_URL:http://localhost:8082}
+  commerce: ${COMMERCE_SERVICE_URL:http://localhost:8083}
+  aftersales: ${AFTERSALES_SERVICE_URL:http://localhost:8084}
